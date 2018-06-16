@@ -21,21 +21,21 @@ The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (
 to power both the Pro Mini and the ESP8266
 
 ### Parts
-* [Arduino Pro Mini 5V/16MHz] (https://robotdyn.com/promini-atmega328p.html)
-* [ESP-01 ESP8266 WiFi Module] (https://robotdyn.com/wifi-module-esp-01-esp8266-8mbit.html)
-* [ESP-01 Adapter] (https://www.aliexpress.com/item/ESP8266-Serial-WiFi-Wireless-ESP-01-Adapter-Module-3-3V-5V-Compatible-For-Arduino/32740695540.html)
-* [Pololu 5V, 500mA Step-Down Voltage Regulator D24V5F5] (https://www.pololu.com/product/2843)
-* [4S LiPo Battery Balance Charger Plug JST-XH] (http://www.dx.com/p/rc-4s-lipo-battery-balance-plug-charger-cable-black-red-10cm-433660#.WyU5evZuIuU)
+* [Arduino Pro Mini 5V/16MHz](https://robotdyn.com/promini-atmega328p.html)
+* [ESP-01 ESP8266 WiFi Module](https://robotdyn.com/wifi-module-esp-01-esp8266-8mbit.html)
+* [ESP-01 Adapter](https://www.aliexpress.com/item/ESP8266-Serial-WiFi-Wireless-ESP-01-Adapter-Module-3-3V-5V-Compatible-For-Arduino/32740695540.html)
+* [Pololu 5V, 500mA Step-Down Voltage Regulator D24V5F5](https://www.pololu.com/product/2843)
+* [4S LiPo Battery Balance Charger Plug JST-XH](http://www.dx.com/p/rc-4s-lipo-battery-balance-plug-charger-cable-black-red-10cm-433660#.WyU5evZuIuU)
 
 ## Installation
 ### Software
 Two sketches are provided:
-* <b>Arduino Pro Mini</b>
-Upload <i>MHI-SPI2ESP.ino</i> using, for example, the Arduino IDE and an [FTDI USB-serial adapter] (http://www.dx.com/nl/p/funduino-ftdi-basic-program-downloader-usb-to-ttl-et232-module-397477?tc=EUR&ta=NL&gclid=EAIaIQobChMI6cO61NDY2wIVRzbTCh0cSQHwEAQYCyABEgJ2WfD_BwE#.WyU-ePZuIuU)
+* <b>Arduino Pro Mini</b><br>
+Upload <i>MHI-SPI2ESP.ino</i> using, for example, the Arduino IDE and an [FTDI USB-serial adapter](http://www.dx.com/nl/p/funduino-ftdi-basic-program-downloader-usb-to-ttl-et232-module-397477?tc=EUR&ta=NL&gclid=EAIaIQobChMI6cO61NDY2wIVRzbTCh0cSQHwEAQYCyABEgJ2WfD_BwE#.WyU-ePZuIuU)
 In the Arduino IDE, select <i>Arduino Pro or Pro mini</i> under <i>Tools</i> > <i>Board</i>.
 
-* <b>ESP-01 ESP8266 WiFi module</b>
-Upload <i>MHI-ESP2MQTT.ino</i> using, for example, the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter] (https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html)
+* <b>ESP-01 ESP8266 WiFi module</b><br>
+Upload <i>MHI-ESP2MQTT.ino</i> using, for example, the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter](https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html)
 In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i>Board</i>.
 I have used the following settings (running at 160 MHz is probably not necessary):
 ![Arduino IDE settings] (../master/docs/images/Arduino-IDE_ESP-01-settings.jpg)
