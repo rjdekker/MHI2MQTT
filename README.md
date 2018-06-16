@@ -38,7 +38,7 @@ In the Arduino IDE, select <i>Arduino Pro or Pro mini</i> under <i>Tools</i> > <
 Upload <i>MHI-ESP2MQTT.ino</i> using, for example, the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter](https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html)
 In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i>Board</i>.
 I have used the following settings (running at 160 MHz is probably not necessary):
-![Arduino IDE settings] (../master/docs/images/Arduino-IDE_ESP-01-settings.jpg)
+![Arduino IDE settings](../master/docs/images/Arduino-IDE_ESP-01-settings.jpg)
 
 ### Configuration
 * Disconnect mains
