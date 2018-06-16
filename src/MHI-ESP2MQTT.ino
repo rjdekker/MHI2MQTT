@@ -17,26 +17,29 @@ R.J. Dekker, June 2018
 #include <PubSubClient.h>                                                                                          //https://github.com/knolleary/pubsubclient
 #include <EasyTransfer.h>                                                                                          //https://github.com/madsci1016/Arduino-EasyTransfer
 
-//Variables below can be changed from the WiFiManager configportal. Put default values here, if there are different values in config.json, they are overwritten.
-char device_name[]      = "MHI Kitchen";
-char mqtt_server[16]    = "192.168.2.50";
-char mqtt_port[9]       = "1883";
-char mqtt_user[20]      = "";
-char mqtt_pass[20]      = "";
-char wifiTimeout[3]     = "5";                                                                                     //Timeout in minutes (max. 99) before WiFi configuration portal is turned off and the ESP tries to connect again to the previously configured AP (if any)
-char Room[20]           = "Kitchen";
-char Thing[20]          = "Airco";
-char Setpoint[60]       = "Setpoint";
-char statusSetpoint[60] = "statusSetpoint";
-char State[60]          = "State";
-char statusState[60]    = "statusState";
-char statusRoomtemp[60] = "statusRoomtemp";
-char Vanes[60]          = "Vanes";
-char statusVanes[60]    = "statusVanes";
-char Fanspeed[60]       = "Fanspeed";
-char statusFanspeed[60] = "statusFanspeed";
-char debug[60]          = "debug";                                                                                 //Send only
-char service[60]        = "service";                                                                               //Receive only
+//Access point that WiFiManager starts for configuration. Name and password should be set below before flashing. This is hardcoded and cannot be changed later.
+#define configSSID  "MHI Roomname"                                                                                 //AP name (give every unit a different before flashing)
+#define configPW    "mitsubishi"                                                                                   //Password to connect to the AP
+
+//Variables below are initial values that can be changed at any time from the WiFiManager configuration portal and will be stored in flash memory. If there are different values in config.json, they are overwritten.
+char mqtt_server[16]     = "192.168.2.50";
+char mqtt_port[9]        = "1883";
+char mqtt_user[20]       = "";
+char mqtt_pass[20]       = "";
+char wifiTimeout[3]      = "5";                                                                                    //Timeout in minutes (max. 99) before WiFi configuration portal is turned off and the ESP tries to connect again to the previously configured AP (if any)
+char Room[20]            = "Roomname";
+char Thing[20]           = "Aircon";
+char Setpoint[60]        = "Setpoint";
+char statusSetpoint[60]  = "statusSetpoint";
+char State[60]           = "State";
+char statusState[60]     = "statusState";
+char statusRoomtemp[60]  = "statusRoomtemp";
+char Vanes[60]           = "Vanes";
+char statusVanes[60]     = "statusVanes";
+char Fanspeed[60]        = "Fanspeed";
+char statusFanspeed[60]  = "statusFanspeed";
+char debug[60]           = "debug";                                                                                //Send only
+char service[60]         = "service";                                                                              //Receive only
 
 //Variables below hold the current values of bit fields 4-7 and all adjustable settings to check if anything changed after receiving an update from the MHI/Arduino
 //Bit field variables are initialized with 255 to force an MQTT update with the most recent MHI settings directly after booting
@@ -99,9 +102,6 @@ template <typename Generic> void debug2mqtt(Generic text)
 
 void setup()
 {
-  Serial.begin(500000);
-  while(Serial.available()) Serial.read();                                                                         //Empty serial read buffer
-
   ETin.begin(details(fromArduino), &Serial);                                                                       //Start the EasyTransfer library, pass in the data details and the name of the serial port
   ETout.begin(details(toArduino), &Serial);
 
@@ -229,7 +229,7 @@ void setup()
   //Fetches ssid and pass and tries to connect
   //If it does not connect it starts an access point with the specified name
   //and goes into a blocking loop awaiting configuration
-  if (!wifiManager.autoConnect(device_name, "mitsubishi"))
+  if (!wifiManager.autoConnect(configSSID, configPW))
     {
       //Serial.println("Failed to connect and hit timeout");
       delay(3000);
@@ -371,17 +371,18 @@ void connect()
           client.publish(debug, msg , true);                                                                       //Publish message to debug topic to test/notify MQTT connection
 
           connectionFails = 0;
+
+          Serial.begin(500000);
+          while(Serial.available()) Serial.read();                                                                 //Empty serial read buffer. Arduino keeps sending updates over serial during wifi configuration and connecting MQTT broker.
         }
       else
         {
-          ++connectionFails;
-
 /*        Serial.print("failed, rc = ");
           Serial.println(client.state());
           Serial.print("Failed connection attempts: ");
-          Serial.println(connectionFails);
-*/
-          if (connectionFails == 3)
+          Serial.println(connectionFails); */
+
+          if (++connectionFails == 3)
             {
               //Serial.println("MQTT broker connection timeout...restarting!");
               delay(1000);
@@ -579,7 +580,7 @@ void loop()
 {
   if (!client.connected())                                                                                         //Check MQTT connection
     {
-      connect();
+      connect();                                                                                                   //Connect first time. Reconnect when connection lost.
     }
 
   client.loop();
