@@ -38,6 +38,7 @@ In the Arduino IDE, select <i>Arduino Pro or Pro mini</i> under <i>Tools</i> > <
 Upload <i>MHI-ESP2MQTT.ino</i> using, for example, the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter](https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html)
 In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i>Board</i>.
 I have used the following settings (running at 160 MHz is probably not necessary):<br>
+
 ![Arduino IDE settings](../master/docs/images/Arduino-IDE_ESP-01-settings.jpg)
 
 ### Configuration
@@ -72,7 +73,7 @@ Various string payloads can be send to the service topic and the system will res
 
 ![MHI2MQTT Service commands](../master/docs/images/MHI2MQTT_service-commands.jpg)
 
-### Behavior when the WiFi network or MQTT broker is downloader
+### Behavior when the WiFi network or MQTT broker is down
 * When the MQTT broker becomes inaccessible, three reconnection attempts will be made by the ESP-01 with ~5 seconds in between. The system will restart if this fails and will first try to reconnect to the access point and then to the MQTT server. This behavior was chosen because if the network client running the MQTT broker disconnects from the access point, the ESP-01 will still be unable to connect to the broker after the client has reconnected. A complete restart of the ESP-01 and reconnection to the access point solves this.
 * When the WiFi connection between the ESP-01 and the access point is lost, the system will restart after a while and WiFiManager will try to connect to the previously configured access point. If this still fails, WiFiManager will start in access point mode (SSID default: <i>MHI Roomname</i>) awaiting reconfiguration by connecting to it. After the timeout previously set in the configuration portal has passed (default: <i>5 minutes</i>), the ESP-01 will restart again and try to reconnect to the previously configured access point. These events will loop endlessly, giving some time to change the configuration when the router SSID, password or MQTT broker host has changed. The ESP-01 should always reconnect after a general power outage, but this might take 5 minutes or more.
 
