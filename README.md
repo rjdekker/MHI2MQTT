@@ -7,7 +7,7 @@ Updates received on the ESP8266 via MQTT are sent to the Arduino over serial and
 The provided code is not a library, but is rather intended as a ready-to-use firmware solution for wirelessly controlling the aircon via MQTT using an Arduino Pro Mini/ESP8266 combination.
 
 ### Circuit and connector
-![Connection scheme](../master/docs/images/MHI2MQTT_scheme.jpg)
+![Connection scheme](https://rjdekker.github.io/MHI2MQTT/docs/images/MHI2MQTT_scheme.jpg)
 
 The CNS socket on the MHI indoor unit's PCB accepts a JST-XH 5-pin female connector. It can be bought already wired as a 4S LiPo balance cable.
 
