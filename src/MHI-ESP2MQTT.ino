@@ -353,7 +353,7 @@ void connect()
       //MQTT connection: Attempt to connect to MQTT broker 3 times: SUCCESS -> continue | FAILED restart ESP
       //On restart it will first try to connect to the previously set AP. If that fails the config portal will be started.
       //If the config portal is not used within wifiTimeout (set in portal), the ESP will retry connecting to the previously set AP again.
-      if (client.connect(device_name, mqtt_user, mqtt_pass))
+      if (client.connect(configSSID, mqtt_user, mqtt_pass))
         {
           //Serial.println("connected!");
 
