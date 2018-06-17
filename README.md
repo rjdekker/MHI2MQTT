@@ -6,10 +6,10 @@ Updates received on the ESP8266 via MQTT are sent to the Arduino over serial and
 ## Getting started
 The provided code is not a library, but is rather intended as a ready-to-use firmware solution for wirelessly controlling the aircon via MQTT using an Arduino Pro Mini/ESP8266 combination.
 
-### Circuit and connection to the aircon
+### Circuit and connector
 ![Connection scheme](../master/docs/images/MHI2MQTT_scheme.jpg)
 
-The CNS socket on the MHI indoor unit's PCB accepts a JST-XH 5-pin female connector. Can also be bought as a 4S LiPo balance cable.
+The CNS socket on the MHI indoor unit's PCB accepts a JST-XH 5-pin female connector. It can be bought already wired as a 4S LiPo balance cable.
 
 JST-XH pin layout (looking at the male socket on the PCB with the locking protrusions/slots <b>downwards</b>):<br>
 Pin 1 (left) = 12V, pin 2 = SPI clock, pin 3 = SPI MOSI, pin 4 = SPI MISO, pin 5 (right) = GND.
@@ -29,20 +29,20 @@ The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (
 ## Installation
 ### Dependencies
 The following additional libraries are necessary and should be added to the Arduino IDE before compiling and flashing the sketches:
-* [WiFiManager](https://github.com/tzapu/WiFiManager) - Manager for configuring and maintaining the WiFi connection, as well as store MQTT settings
+* [WiFiManager](https://github.com/tzapu/WiFiManager) -For managing the WiFi connection and changing MQTT settings
 * [PubSubClient](https://github.com/knolleary/pubsubclient) - MQTT client
-* [EasyTransfer](https://github.com/madsci1016/Arduino-EasyTransfer) - Takes care of serial communication between Pro Mini and ESP-01
-* [ArduinoJson](https://github.com/bblanchon/ArduinoJson) - JSON library for reading and storing WiFiManager settings
+* [EasyTransfer](https://github.com/madsci1016/Arduino-EasyTransfer) - Takes care of serial communication between the Pro Mini and ESP-01
+* [ArduinoJson](https://github.com/bblanchon/ArduinoJson) - JSON library for reading and storing WiFiManager settings in flash memory
 
 ### Installing the sketches
 Two sketches are provided:
 * <b>Arduino Pro Mini</b><br>
-Upload <i>MHI-SPI2ESP.ino</i> using, for example, the Arduino IDE and an [FTDI USB-serial adapter](http://www.dx.com/nl/p/funduino-ftdi-basic-program-downloader-usb-to-ttl-et232-module-397477?tc=EUR&ta=NL&gclid=EAIaIQobChMI6cO61NDY2wIVRzbTCh0cSQHwEAQYCyABEgJ2WfD_BwE#.WyU-ePZuIuU)<br>
+Upload <i>MHI-SPI2ESP.ino</i> using the Arduino IDE and an [FTDI USB-serial adapter](http://www.dx.com/nl/p/funduino-ftdi-basic-program-downloader-usb-to-ttl-et232-module-397477?tc=EUR&ta=NL&gclid=EAIaIQobChMI6cO61NDY2wIVRzbTCh0cSQHwEAQYCyABEgJ2WfD_BwE#.WyU-ePZuIuU).<br>
 In the Arduino IDE, select <i>Arduino Pro or Pro mini</i> under <i>Tools</i> > <i>Board</i> and select <i>ATmega328P (5V, 16 MHz)</i> under <i>Tools</i> > <i>Processor</i>.
 
 * <b>ESP-01 ESP8266 WiFi module</b><br>
-<i>Optional:</i> Change the name and password of the access point that is used to configure the ESP-1 on first boot (line 21-22 of <i>MHI-ESP2MQTT.ino</i>). This is <b>not the name of your home WiFi network (SSID)!</i> I use the name of the room the air conditioner is in.
-Upload <i>MHI-ESP2MQTT.ino</i> using, for example, the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter](https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html)<br>
+<i>Optional:</i> Change the name (SSID) and password of the access point that is started by the ESP-01 for configuration on first boot (lines 21-22 of <i>MHI-ESP2MQTT.ino</i>). This is <b>not the name of your home WiFi network (SSID)!</b> I use the name of the room the air conditioner is in.<br>
+Upload <i>MHI-ESP2MQTT.ino</i> using the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter](https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html).<br>
 In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i>Board</i>.
 I have used the following settings (running at 160 MHz is probably not necessary):<br>
 
@@ -53,15 +53,15 @@ I have used the following settings (running at 160 MHz is probably not necessary
 * Connect the circuit to the air conditioner's CNS connector
 * Reconnect mains
 * Using a tablet or smart phone connect to the ESP-01's SSID (default: <i>MHI Roomname</i>, or as configured in line 21 of <i>MHI-ESP2MQTT.ino</i>)
-* Default password is <i>mitsubishi</i>
-* The configuration portal should display automatically within a few seconds
+* Default password is <i>mitsubishi</i>, or as configured in line 22 of <i>MHI-ESP2MQTT.ino</i>
+* The configuration portal should display automatically within a few seconds. If not, open a browser and enter 192.168.4.1.
 * Select <i>Configure WiFi</i>
 * Select home network on which the MQTT broker is running
 * Enter WiFi password
 * Enter IP address of MQTT broker
 * Enter port number of the MQTT broker
 * Enter MQTT username and password (leave empty if not used)
-* Optional: Change <i>WiFi Timeout</i> (max. 99 minutes). Don't set it too high or it will a long time before it will reconnect after the network was down.
+* Optional: Change <i>WiFi Timeout</i> (max. 99 minutes). Don't set it too high or it will a long time before it will reconnect after the network has been down.
 * Set the name of the room that the aircon is in (all available MQTT topics will have the prefix <i>Roomname/Aircon/...</i>)
 * Optional: Change the name of the aircon
 * Optional: Change topic names for <i>setpoint</i>, <i>state</i>, <i>vanes</i>, <i>fan speed</i>, <i>debug</i> and <i>service</i>
@@ -76,7 +76,7 @@ The table below shows the topics and respective value range that can be used to 
 ![MHI2MQTT Topics & Values](../master/docs/images/MHI2MQTT_topics&values.jpg)
 
 The default topic <i>statusRoomtemp</i> will be updated with the ambient temperature (in degrees Celsius) every ~6 seconds.
-Various string payloads can be send to the service topic and the system will respond as follows:
+Various service commands can be send to the service topic and the system will respond as follows:
 
 ![MHI2MQTT Service commands](../master/docs/images/MHI2MQTT_service-commands.jpg)
 
@@ -86,8 +86,8 @@ Various string payloads can be send to the service topic and the system will res
 
 ## Notes
 ### Details about the communication protocol
-* Low-level SPI protocol exchanging frames of 20 bytes/bit fields using LSB first, 8 bits/transfer, clock is high when inactive (CPOL=1), data is valid on clock trailing edge (CPHA=1). Timing details of 20-byte SPI frames: 1 byte ~0.5 msec; 20-byte SPIframe ~10 msec; pause between two frames ~30 msec. Time between the start of 2 consecutive frames is ~40 msec (~25 Hz).
-* High-level SPI protocol where master (MHI) and slave (Arduino) exchange a repetitive pattern of special bit settings in bit fields 10, 13-16 and 18.
+* <b>Low-level SPI protocol</b> exchanging frames of 20 bytes/bit fields using LSB first, 8 bits/transfer, clock is high when inactive (CPOL=1), data is valid on clock trailing edge (CPHA=1). Timing details of 20-byte SPI frames: 1 byte ~0.5 msec; 20-byte SPIframe ~10 msec; pause between two frames ~30 msec. Time between the start of 2 consecutive frames is ~40 msec (~25 Hz).
+* <b>High-level SPI protocol</b> where master (MHI) and slave (Arduino) exchange a repetitive pattern of special bit settings in bit fields 10, 13-16 and 18.
 In contrast to the low-level SPI protocol, the SPI slave now functions as a 'master' and generates what appears to be its own low frequency clock (~0.5 Hz) by toggling bit 3 of bit field 18 every 24 SPI frames.
 All bidirectional changes in values are synchronous to this 'clock', with few exceptions such as the room temperature in bit field 7.
 To successfully connect, a sequence of 3 repeating SPI frame variants should be send to the MHI. If correct, the MHI will respond by sending its own frame variations to acknowledge a valid SPI connection (?). Possibly, the frame variations send back by the MHI identify the unit type and can be used by the controller to make unit-specific functions available.
