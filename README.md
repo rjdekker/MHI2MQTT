@@ -75,7 +75,7 @@ The table below shows the topics and respective value range that can be used to 
 
 ![MHI2MQTT Topics & Values](https://rjdekker.github.io/MHI2MQTT/docs/images/MHI2MQTT_topics&values.jpg)
 
-The default topic <i>statusRoomtemp</i> will be updated with the ambient temperature (in degrees Celsius) every ~6 seconds.
+The default topic <i>statusRoomtemp</i> will be updated with the ambient temperature (in degrees Celsius) every ~6 seconds.<br>
 Various service commands can be send to the service topic and the system will respond as follows:
 
 ![MHI2MQTT Service commands](https://rjdekker.github.io/MHI2MQTT/docs/images/MHI2MQTT_service-commands.jpg)
