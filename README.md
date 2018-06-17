@@ -11,14 +11,13 @@ The provided code is not a library, but is rather intended as a ready-to-use fir
 
 The CNS socket on the MHI indoor unit's PCB accepts a JST-XH 5-pin female connector. Can also be bought as a 4S LiPo balance cable.
 
-JST-XH pin layout (looking at the male socket on the PCB with the locking protrusions/slots <b>downwards</b>):
-Pin 1 (left) = 12V; pin 2 = SPI clock; pin 3 = SPI MOSI; pin 4 = SPI MISO; pin 5 (right) = GND.
+JST-XH pin layout (looking at the male socket on the PCB with the locking protrusions/slots <b>downwards</b>):<br>
+Pin 1 (left) = 12V, pin 2 = SPI clock, pin 3 = SPI MOSI, pin 4 = SPI MISO, pin 5 (right) = GND.
 
-Check before connecting with a multitester. GND vs. clock should be +5V. If voltage over outer pins is -12V then connector orientation is wrong.
+Check before connecting with a multitester. GND versus clock should be +5V. If the voltage over outer pins is -12V then connector orientation is wrong.
 Pins 2 - 5 are 5V and directly compatible with an Arduino Pro Mini 5V/16 MHz version. Note that the 3.3V/8MHz version is NOT directly compatible and logic level conversion is necessary. The 8 MHz is possibly to slow to keep up with SPI communication and data processing, although I didn't test this.
 
-The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (pin 1) of the MHI unit did not work in my setup. I use a Pololu D24V5F5 step-down voltage regulator
-to power both the Pro Mini and the ESP8266
+The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (pin 1) of the MHI unit did not work in my setup. I use a Pololu D24V5F5 step-down voltage regulator to power both the Pro Mini and the ESP8266
 
 ### Parts
 * [Arduino Pro Mini 5V/16MHz](https://robotdyn.com/promini-atmega328p.html)
@@ -28,20 +27,28 @@ to power both the Pro Mini and the ESP8266
 * [4S LiPo Battery Balance Charger Plug JST-XH](http://www.dx.com/p/rc-4s-lipo-battery-balance-plug-charger-cable-black-red-10cm-433660#.WyU5evZuIuU)
 
 ## Installation
-### Software
+### Dependencies
+The following additional libraries are necessary and should be added to the Arduino IDE before compiling and flashing the sketches:
+* [WiFiManager](https://github.com/tzapu/WiFiManager) - Manager for configuring and maintaining the WiFi connection, as well as store MQTT settings
+* [PubSubClient](https://github.com/knolleary/pubsubclient) - MQTT client
+* [EasyTransfer](https://github.com/madsci1016/Arduino-EasyTransfer) - Takes care of serial communication between Pro Mini and ESP-01
+* [ArduinoJson](https://github.com/bblanchon/ArduinoJson) - JSON library for reading and storing WiFiManager settings
+
+### Installing the sketches
 Two sketches are provided:
 * <b>Arduino Pro Mini</b><br>
-Upload <i>MHI-SPI2ESP.ino</i> using, for example, the Arduino IDE and an [FTDI USB-serial adapter](http://www.dx.com/nl/p/funduino-ftdi-basic-program-downloader-usb-to-ttl-et232-module-397477?tc=EUR&ta=NL&gclid=EAIaIQobChMI6cO61NDY2wIVRzbTCh0cSQHwEAQYCyABEgJ2WfD_BwE#.WyU-ePZuIuU)
-In the Arduino IDE, select <i>Arduino Pro or Pro mini</i> under <i>Tools</i> > <i>Board</i>.
+Upload <i>MHI-SPI2ESP.ino</i> using, for example, the Arduino IDE and an [FTDI USB-serial adapter](http://www.dx.com/nl/p/funduino-ftdi-basic-program-downloader-usb-to-ttl-et232-module-397477?tc=EUR&ta=NL&gclid=EAIaIQobChMI6cO61NDY2wIVRzbTCh0cSQHwEAQYCyABEgJ2WfD_BwE#.WyU-ePZuIuU)<br>
+In the Arduino IDE, select <i>Arduino Pro or Pro mini</i> under <i>Tools</i> > <i>Board</i> and select <i>ATmega328P (5V, 16 MHz)</i> under <i>Tools</i> > <i>Processor</i>.
 
 * <b>ESP-01 ESP8266 WiFi module</b><br>
-Upload <i>MHI-ESP2MQTT.ino</i> using, for example, the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter](https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html)
+<i>Optional:</i> Change the name and password of the access point that is used to configure the ESP-1 on first boot (line 21-22 of <i>MHI-ESP2MQTT.ino</i>). This is <b>not the name of your home WiFi network (SSID)!</i> I use the name of the room the air conditioner is in.
+Upload <i>MHI-ESP2MQTT.ino</i> using, for example, the Arduino IDE and an [ESP-01 ESP8266 USB-UART Adapter](https://www.aliexpress.com/store/product/ESP01-Programmer-Adapter-UART-GPIO0-ESP-01-Adaptaterr-ESP8266-USB-to-ESP8266-Serial-Wireless-Wifi/2221053_32704996344.html)<br>
 In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i>Board</i>.
 I have used the following settings (running at 160 MHz is probably not necessary):<br>
 
 ![Arduino IDE settings](../master/docs/images/Arduino-IDE_ESP-01-settings.jpg)
 
-### Configuration
+### Connecting and configuring the system
 * Disconnect mains
 * Connect the circuit to the air conditioner's CNS connector
 * Reconnect mains
@@ -88,3 +95,7 @@ Each frame variation is send 24 times with bit 3 of bit field 18 set to 1, and s
 
 ### Notes on handling SPI communication in the code
 The Arduino Mini Pro had problems staying in sync with the aircon's SPI data during the early test phase. To solve this, a state machine type of approach was chosen to prevent the SPI interrupt routine from being obstructed (by e.g. UART serial communication with the ESP-01) until a full 20-byte is received (state 0). Then, two states are possible: one to update frames, calculate checksums and send values obtained from the aircon to the ESP-01 (state 1); and one where the serial connection is checked for data arriving from the ESP-01 (state 2). When debugging is enabled using the service command <i>debugon</i>, the debug topic will provide a cumulative count of the number of SPI synchronisation errors (until a reboot/reset). I never ran into sync issues anymore since I started using the state machine approach, so this debugging feature is obsolete unless you want to test the sketch on other Arduino boards.
+
+## Acknowledgments
+This work would not have been possible in the current form without the ingenious work of others:
+<i>WiFiManager</i> by Tzapu, <i>PubSubClient</i> by Nick O'Leary, <i>EasyTransfer</i> by Bill Porter and <i>ArduinoJson</i> by Benoît Blanchon. In addition to using these libraries, parts of the code were obtained from the example sketches.

@@ -190,7 +190,7 @@ void setup()
   //WiFiManager
   //Local intialization. Once its business is done, there is no need to keep it around
   WiFiManager wifiManager;
-  wifiManager.setDebugOutput(true);
+  wifiManager.setDebugOutput(false);
 
   //Set config save notify callback
   wifiManager.setSaveConfigCallback(saveConfigCallback);
