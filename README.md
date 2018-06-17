@@ -46,7 +46,7 @@ Upload <i>MHI-ESP2MQTT.ino</i> using the Arduino IDE and an [ESP-01 ESP8266 USB-
 In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i>Board</i>.
 I have used the following settings (running at 160 MHz is probably not necessary):<br>
 
-![Arduino IDE settings](../master/docs/images/Arduino-IDE_ESP-01-settings.jpg)
+![Arduino IDE settings](https://rjdekker.github.io/MHI2MQTT/docs/images/Arduino-IDE_ESP-01-settings.jpg)
 
 ### Connecting and configuring the system
 * Disconnect mains
@@ -73,12 +73,12 @@ The system will connect to the MQTT broker and will send to first update to the 
 ## Wireless operation using MQTT
 The table below shows the topics and respective value range that can be used to operate the aircon:
 
-![MHI2MQTT Topics & Values](../master/docs/images/MHI2MQTT_topics&values.jpg)
+![MHI2MQTT Topics & Values](https://rjdekker.github.io/MHI2MQTT/docs/images/MHI2MQTT_topics&values.jpg)
 
 The default topic <i>statusRoomtemp</i> will be updated with the ambient temperature (in degrees Celsius) every ~6 seconds.
 Various service commands can be send to the service topic and the system will respond as follows:
 
-![MHI2MQTT Service commands](../master/docs/images/MHI2MQTT_service-commands.jpg)
+![MHI2MQTT Service commands](https://rjdekker.github.io/MHI2MQTT/docs/images/MHI2MQTT_service-commands.jpg)
 
 ### Behavior when the WiFi network or MQTT broker is down
 * When the MQTT broker becomes inaccessible, three reconnection attempts will be made by the ESP-01 with ~5 seconds in between. The system will restart if this fails and will first try to reconnect to the access point and then to the MQTT server. This behavior was chosen because if the network client running the MQTT broker disconnects from the access point, the ESP-01 will still be unable to connect to the broker after the client has reconnected. A complete restart of the ESP-01 and reconnection to the access point solves this.
