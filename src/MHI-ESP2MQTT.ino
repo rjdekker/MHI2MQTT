@@ -12,17 +12,19 @@ R.J. Dekker, June 2018
 #include <ESP8266WiFi.h>
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 #include <WiFiManager.h>                                                                                           //https://github.com/tzapu/WiFiManager
 #include <ArduinoJson.h>                                                                                           //https://github.com/bblanchon/ArduinoJson
 #include <PubSubClient.h>                                                                                          //https://github.com/knolleary/pubsubclient
 #include <EasyTransfer.h>                                                                                          //https://github.com/madsci1016/Arduino-EasyTransfer
 
 //Access point that WiFiManager starts for configuration. Name and password should be set below before flashing. This is hardcoded and cannot be changed later.
-#define configSSID  "MHI Roomname"                                                                                 //AP name (give every unit a different before flashing)
+#define configSSID  "MHI Roomname"                                                                                 //AP name (give every unit a unique name before flashing)
 #define configPW    "mitsubishi"                                                                                   //Password to connect to the AP
 
 //Variables below are initial values that can be changed at any time from the WiFiManager configuration portal and will be stored in flash memory. If there are different values in config.json, they are overwritten.
-char mqtt_server[16]     = "192.168.2.50";
+char mqtt_server[16]     = "0.0.0.0";
 char mqtt_port[9]        = "1883";
 char mqtt_user[20]       = "";
 char mqtt_pass[20]       = "";
@@ -339,8 +341,25 @@ void setup()
   //Serial.print("Local IP adres: ");
   //Serial.println(WiFi.localIP());
 
+  //Connect to MQTT broker and set callback
   client.setServer(mqtt_server, atoi(mqtt_port));
   client.setCallback(callback);
+
+  //Configure Arduino OTA updater
+  ArduinoOTA.setHostname(configSSID);                                                                              //Set OTA hostname and password (same as local access point for WiFiManager)
+  ArduinoOTA.setPassword((const char *)configPW);
+  //ArduinoOTA.setPort(8266);                                                                                      //Port defaults to 8266
+
+  ArduinoOTA.onError([](ota_error_t error)                                                                         //Send OTA error messages to MQTT debug topic
+    {
+      if      (error == OTA_AUTH_ERROR)      client.publish(debug, "<OTA> ERROR -> Auth failed", true);
+      else if (error == OTA_BEGIN_ERROR)     client.publish(debug, "<OTA> ERROR -> Begin failed", true);
+      else if (error == OTA_CONNECT_ERROR)   client.publish(debug, "<OTA> ERROR -> Connect failed", true);
+      else if (error == OTA_RECEIVE_ERROR)   client.publish(debug, "<OTA> ERROR -> Receive failed", true);
+      else if (error == OTA_END_ERROR)       client.publish(debug, "<OTA> ERROR -> End failed", true);
+    });
+
+  ArduinoOTA.begin();
 }
 
 void connect()
@@ -578,6 +597,8 @@ void callback(char* topic, byte* payload, unsigned int length)
 
 void loop()
 {
+  ArduinoOTA.handle();                                                                                             //Handle Arduino OTA updates
+
   if (!client.connected())                                                                                         //Check MQTT connection
     {
       connect();                                                                                                   //Connect first time. Reconnect when connection lost.

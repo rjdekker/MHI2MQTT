@@ -47,6 +47,8 @@ In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i
 I have used the following settings (running at 160 MHz is probably not necessary):<br>
 
 ![Arduino IDE settings](https://rjdekker.github.io/MHI2MQTT/docs/images/Arduino-IDE_ESP-01-settings.jpg)
+<br>
+After the sketch is flashed for the first time, future updates to the ESP-01 can also be uploaded OTA. Name and password are equal to those set for the configuration access point (Default: <i>MHI Roomname</i> with password <i>mitsubishi</i>). The Arduino Mini Pro cannot be updated OTA.
 
 ### Connecting and configuring the system
 * Disconnect mains
