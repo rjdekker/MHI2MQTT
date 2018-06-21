@@ -29,7 +29,7 @@ The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (
 ## Installation
 ### Dependencies
 The following additional libraries are necessary and should be added to the Arduino IDE before compiling and flashing the sketches:
-* [WiFiManager](https://github.com/tzapu/WiFiManager) -For managing the WiFi connection and changing MQTT settings
+* [WiFiManager](https://github.com/tzapu/WiFiManager) - For managing the WiFi connection and changing MQTT settings
 * [PubSubClient](https://github.com/knolleary/pubsubclient) - MQTT client
 * [EasyTransfer](https://github.com/madsci1016/Arduino-EasyTransfer) - Takes care of serial communication between the Pro Mini and ESP-01
 * [ArduinoJson](https://github.com/bblanchon/ArduinoJson) - JSON library for reading and storing WiFiManager settings in flash memory
@@ -48,7 +48,7 @@ I have used the following settings (running at 160 MHz is probably not necessary
 
 ![Arduino IDE settings](https://rjdekker.github.io/MHI2MQTT/docs/images/Arduino-IDE_ESP-01-settings.jpg)
 <br><br>
-After the sketch is flashed for the first time, future updates to the ESP-01 can also be uploaded OTA. Name and password are equal to those set for the configuration access point (Default: <i>MHI Roomname</i> with password <i>mitsubishi</i>). The Arduino Mini Pro cannot be updated OTA.
+After the sketch is flashed for the first time, future updates to the ESP-01 can also be uploaded OTA. Name and password are equal to those set for the configuration access point (Default: <i>MHI Roomname</i> with password <i>mitsubishi</i>). The Arduino Pro Mini cannot be updated OTA.
 
 ### Connecting and configuring the system
 * Disconnect the mains
