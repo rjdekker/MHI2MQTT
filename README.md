@@ -47,30 +47,29 @@ In the Arduino IDE, select <i>Generic ESP8266 Module</i> under <i>Tools</i> > <i
 I have used the following settings (running at 160 MHz is probably not necessary):<br>
 
 ![Arduino IDE settings](https://rjdekker.github.io/MHI2MQTT/docs/images/Arduino-IDE_ESP-01-settings.jpg)
-<br>
+<br><br>
 After the sketch is flashed for the first time, future updates to the ESP-01 can also be uploaded OTA. Name and password are equal to those set for the configuration access point (Default: <i>MHI Roomname</i> with password <i>mitsubishi</i>). The Arduino Mini Pro cannot be updated OTA.
 
 ### Connecting and configuring the system
-* Disconnect mains
+* Disconnect the mains
 * Connect the circuit to the air conditioner's CNS connector
-* Reconnect mains
-* Using a tablet or smart phone connect to the ESP-01's SSID (default: <i>MHI Roomname</i>, or as configured in line 21 of <i>MHI-ESP2MQTT.ino</i>)
+* Reconnect the mains
+* Using a tablet or smart phone, connect to the ESP-01's SSID (default: <i>MHI Roomname</i>, or as configured in line 21 of <i>MHI-ESP2MQTT.ino</i>)
 * Default password is <i>mitsubishi</i>, or as configured in line 22 of <i>MHI-ESP2MQTT.ino</i>
 * The configuration portal should display automatically within a few seconds. If not, open a browser and enter 192.168.4.1.
 * Select <i>Configure WiFi</i>
-* Select home network on which the MQTT broker is running
-* Enter WiFi password
-* Enter IP address of MQTT broker
-* Enter port number of the MQTT broker
-* Enter MQTT username and password (leave empty if not used)
-* Optional: Change <i>WiFi Timeout</i> (max. 99 minutes). Don't set it too high or it will a long time before it will reconnect after the network has been down.
-* Set the name of the room that the aircon is in (all available MQTT topics will have the prefix <i>Roomname/Aircon/...</i>)
-* Optional: Change the name of the aircon
+* Select the home network on which the MQTT broker is running
+* Enter the WiFi password
+* Enter the IP address and port number of the MQTT broker
+* Enter the MQTT username and password (leave empty if not used)
+* Optional: Change the <i>WiFi Timeout</i> (max. 99 minutes; default: 5 minutes). Don't set it too high or it will take a long time before it will reconnect after the network has been down.
+* Set the name of the room that the aircon is in (all available MQTT topics will have the prefix <i>Roomname/Aircon/...</i>). You can add deeper topic levels in the <i>Roomname</i> field (<i>e.g.</i> Bedroom/John).
+* Optional: Change the name of the unit (default: <i>Aircon</i>)
 * Optional: Change topic names for <i>setpoint</i>, <i>state</i>, <i>vanes</i>, <i>fan speed</i>, <i>debug</i> and <i>service</i>
 * Topic names that start with <i>status</i> by default, will be updated with the current aircon settings every ~6 seconds, or directly after a new setting is acknowledged by the aircon
 * Select <i>Save</i>
 
-The system will connect to the MQTT broker and will send to first update to the <i>status</i> topics within 10 seconds. From now on, sending payloads to the topics (see table below under <i>Usage</i>) should cause the aircon to respond within max. 2 seconds.
+The system will connect to the selected WiFi network and the MQTT broker. You can check if everything works by using the command line to temporarily subscribe to the relevant topics: <i>Roomname/Aircon/#</i>. If all is well, a successful connection will be notified on the <i>debug</i> topic. Within ~10 seconds after connection, the current aircon's state will be sent to the <i>status</i> topics. From now on, sending payloads to the topics (see table below under <i>Wireless operation using MQTT</i>) should cause the aircon to respond within max. 2 seconds. All successful commands will be acknowledged by the aircon on the respective status topic.
 
 ## Wireless operation using MQTT
 The table below shows the topics and respective value range that can be used to operate the aircon:
