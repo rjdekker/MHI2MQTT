@@ -9,6 +9,8 @@ The provided code is not a library, but is rather intended as a ready-to-use fir
 ### Circuit and connector
 ![Connection scheme](https://rjdekker.github.io/MHI2MQTT/docs/images/MHI2MQTT_scheme.jpg)
 
+I want to advice you to not solder a fixed connection between the Arduino and ESP-01. Using male and female pin headers instead (see figure above) will enable you to still upload updates the Arduino at a later stage.
+
 The CNS socket on the MHI indoor unit's PCB accepts a JST-XH 5-pin female connector. It can be bought already wired as a 4S LiPo balance cable.
 
 JST-XH pin layout (looking at the male socket on the PCB with the locking protrusions/slots <b>downwards</b>):<br>
@@ -17,7 +19,13 @@ Pin 1 (left) = 12V, pin 2 = SPI clock, pin 3 = SPI MOSI, pin 4 = SPI MISO, pin 5
 Check before connecting with a multitester. GND versus clock should be +5V. If the voltage over outer pins is -12V then connector orientation is wrong.
 Pins 2 - 5 are 5V and directly compatible with an Arduino Pro Mini 5V/16 MHz version. Note that the 3.3V/8MHz version is NOT directly compatible and logic level conversion is necessary. The 8 MHz is possibly to slow to keep up with SPI communication and data processing, although I didn't test this.
 
-The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (pin 1) of the MHI unit did not work in my setup. I use a Pololu D24V5F5 step-down voltage regulator to power both the Pro Mini and the ESP8266
+The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (pin 1) of the MHI unit did not work in my setup. I use a Pololu D24V5F5 step-down voltage regulator to power both the Pro Mini and the ESP8266.
+
+Oh, and while you're at it, take out the two LEDs on the Arduino. They are ridiculously bright. Really, the light will pass through the plastic casing and will light up your aircon like it's Christmas all year. I advise to use a soldering iron to do this (find good instructions on YouTube). Do not start cutting the LEDs traces as you will likely damage traces underneath.
+
+When I was done soldering and had uploaded the firmware, I wrapped the entire contraption in shrink wrap to fix all the removable parts and protect against causing possible short-circuits while installed in the aircon.
+
+![Contraption](https://rjdekker.github.io/MHI2MQTT/docs/images/Contraption.jpg)
 
 ### Parts
 * [Arduino Pro Mini 5V/16MHz](https://robotdyn.com/promini-atmega328p.html)
@@ -52,7 +60,7 @@ After the sketch is flashed for the first time, future updates to the ESP-01 can
 
 ### Connecting and configuring the system
 * Disconnect the mains
-* Connect the circuit to the air conditioner's CNS connector
+* Connect the circuit to the air conditioner's CNS connector*
 * Reconnect the mains
 * Using a tablet or smart phone, connect to the ESP-01's SSID (default: <i>MHI Roomname</i>, or as configured in line 21 of <i>MHI-ESP2MQTT.ino</i>)
 * Default password is <i>mitsubishi</i>, or as configured in line 22 of <i>MHI-ESP2MQTT.ino</i>
@@ -68,6 +76,10 @@ After the sketch is flashed for the first time, future updates to the ESP-01 can
 * Optional: Change topic names for <i>setpoint</i>, <i>state</i>, <i>vanes</i>, <i>fan speed</i>, <i>debug</i> and <i>service</i>
 * Topic names that start with <i>status</i> by default, will be updated with the current aircon settings every ~6 seconds, or directly after a new setting is acknowledged by the aircon
 * Select <i>Save</i>
+
+&ast; Look for a service manual of your aircon model for instructions to get access to the CNS connector.
+
+![Installed](https://rjdekker.github.io/MHI2MQTT/docs/images/Installed.jpg)
 
 The system will connect to the selected WiFi network and the MQTT broker. You can check if everything works by using the command line to temporarily subscribe to the relevant topics: <i>Roomname/Aircon/#</i>. If all is well, a successful connection will be notified on the <i>debug</i> topic. Within ~10 seconds after connection, the current aircon's state will be sent to the <i>status</i> topics. From now on, sending payloads to the topics (see table below under <i>Wireless operation using MQTT</i>) should cause the aircon to respond within max. 2 seconds. All successful commands will be acknowledged by the aircon on the respective status topic.
 
