@@ -79,7 +79,7 @@ After the sketch is flashed for the first time, future updates to the ESP-01 can
 
 The system will connect to the selected WiFi network and the MQTT broker. You can check if everything works by using the command line to temporarily subscribe to the relevant topics: <i>Roomname/Aircon/#</i>. If all is well, a successful connection will be notified on the <i>debug</i> topic. Within ~10 seconds after connection, the current aircon's state will be sent to the <i>status</i> topics. From now on, sending payloads to the topics (see table below under <i>Wireless operation using MQTT</i>) should cause the aircon to respond within max. 2 seconds. All successful commands will be acknowledged by the aircon on the respective status topic.
 
-&ast; Look for a service manual of your aircon model for instructions to get access to the CNS connector.
+&ast; Look for a service manual of your aircon model for instructions on how to get access to the CNS connector.
 
 ![Installed](https://rjdekker.github.io/MHI2MQTT/docs/images/Installed.jpg)
 <br>
