@@ -25,7 +25,7 @@ Oh, and while you're at it, take out the two LEDs on the Arduino. They are ridic
 
 When I was done soldering and had uploaded the firmware, I wrapped the entire contraption in shrink wrap to fix all the removable parts and protect against causing possible short-circuits while installed in the aircon.
 
-
+![Contraption](https://rjdekker.github.io/MHI2MQTT/docs/images/Contraption.jpg)
 
 ### Parts
 * [Arduino Pro Mini 5V/16MHz](https://robotdyn.com/promini-atmega328p.html)
