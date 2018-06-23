@@ -9,9 +9,9 @@ The provided code is not a library, but is rather intended as a ready-to-use fir
 ### Circuit and connector
 ![Connection scheme](https://rjdekker.github.io/MHI2MQTT/docs/images/MHI2MQTT_scheme.jpg)
 
-I want to advice you to not solder a fixed connection between the Arduino and ESP-01. Using male and female pin headers instead (see figure above) will enable you to still upload updates the Arduino at a later stage.
+I would like to advise you to not solder a fixed connection between the Arduino and ESP-01. Using male and female pin headers for the connection (see figure above) will enable you to easily upload updates the Arduino at a later stage.
 
-The CNS socket on the MHI indoor unit's PCB accepts a JST-XH 5-pin female connector. It can be bought already wired as a 4S LiPo balance cable.
+The CNS socket on the MHI indoor unit's PCB accepts a JST-XH 5-pin female connector. It can be bought pre-wired as a 4S LiPo balance cable. In addition, I use a prefab male-to-female version of this cable as an extension cord.
 
 JST-XH pin layout (looking at the male socket on the PCB with the locking protrusions/slots <b>downwards</b>):<br>
 Pin 1 (left) = 12V, pin 2 = SPI clock, pin 3 = SPI MOSI, pin 4 = SPI MISO, pin 5 (right) = GND.
@@ -21,9 +21,9 @@ Pins 2 - 5 are 5V and directly compatible with an Arduino Pro Mini 5V/16 MHz ver
 
 The Arduino Pro Mini is 12V tolerant according to its specs, but using the 12V (pin 1) of the MHI unit did not work in my setup. I use a Pololu D24V5F5 step-down voltage regulator to power both the Pro Mini and the ESP8266.
 
-Oh, and while you're at it, take out the two LEDs on the Arduino. They are ridiculously bright. Really, the light will pass through the plastic casing and will light up your aircon like it's Christmas all year. I advise to use a soldering iron to do this (find good instructions on YouTube). Do not start cutting the LEDs traces as you will likely damage traces underneath.
+Oh, and while you're at it, take out the two LEDs on the Arduino. They are ridiculously bright. Really, the light will pass through the plastic casing and will light up your aircon like it's Christmas all year. It's better to use a soldering iron to do this (find good instructions on YouTube). Do not start cutting the LEDs traces as you will likely damage traces underneath.
 
-When I was done soldering and had uploaded the firmware, I wrapped the entire contraption in shrink wrap to fix all the removable parts and protect against causing possible short-circuits while installed in the aircon.
+After soldering and uploading the firmware, I wrapped the entire contraption in shrink wrap to fix all the (re)movable parts and protect against causing possible short-circuits while installed in the aircon.
 
 ![Contraption](https://rjdekker.github.io/MHI2MQTT/docs/images/Contraption.jpg)
 
@@ -56,7 +56,7 @@ I have used the following settings (running at 160 MHz is probably not necessary
 
 ![Arduino IDE settings](https://rjdekker.github.io/MHI2MQTT/docs/images/Arduino-IDE_ESP-01-settings.jpg)
 <br><br>
-After the sketch is flashed for the first time, future updates to the ESP-01 can also be uploaded OTA. Name and password are equal to those set for the configuration access point (Default: <i>MHI Roomname</i> with password <i>mitsubishi</i>). The Arduino Pro Mini cannot be updated OTA.
+Once the sketch is flashed for the first time, future updates to the ESP-01 can also be uploaded OTA. Name and password are equal to those set for the configuration access point (Default: <i>MHI Roomname</i> with password <i>mitsubishi</i>). The Arduino Pro Mini cannot be updated OTA.
 
 ### Connecting and configuring the system
 * Disconnect the mains
@@ -77,9 +77,9 @@ After the sketch is flashed for the first time, future updates to the ESP-01 can
 * Topic names that start with <i>status</i> by default, will be updated with the current aircon settings every ~6 seconds, or directly after a new setting is acknowledged by the aircon
 * Select <i>Save</i>
 
-The system will connect to the selected WiFi network and the MQTT broker. You can check if everything works by using the command line to temporarily subscribe to the relevant topics: <i>Roomname/Aircon/#</i>. If all is well, a successful connection will be notified on the <i>debug</i> topic. Within ~10 seconds after connection, the current aircon's state will be sent to the <i>status</i> topics. From now on, sending payloads to the topics (see table below under <i>Wireless operation using MQTT</i>) should cause the aircon to respond within max. 2 seconds. All successful commands will be acknowledged by the aircon on the respective status topic.
+The system will connect to the selected WiFi network and the MQTT broker. You can quickly check if everything works by using the command line to temporarily subscribe to the relevant topics: <i>Roomname/Aircon/#</i>. If all is well, a successful connection will be notified on the <i>debug</i> topic. Within ~10 seconds after connection, the aircon's current settings will be sent to the <i>status</i> topics. From now on, sending payloads to the topics (see table below under <i>Wireless operation using MQTT</i>) should cause the aircon to respond within max. 2 seconds. All successful commands will be acknowledged by the aircon on the respective status topic.
 
-&ast; Look for a service manual of your aircon model for instructions on how to get access to the CNS connector.
+&ast; Google for a service manual of your aircon model for instructions on how to get access to the CNS connector. The image below is of an SRK50ZS-S where I extended the CNS connector from the more difficult-to-reach side panel to the front mains connection box for easy access. Please switch off the mains before doing this and take care that the module is properly isolated (<i>e.g.</i> shrink wrap) and fixed with a cable tie so it can't touch the high-voltage terminals.
 
 ![Installed](https://rjdekker.github.io/MHI2MQTT/docs/images/Installed.jpg)
 <br>
