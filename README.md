@@ -113,3 +113,6 @@ The Arduino Mini Pro had problems staying in sync with the aircon's SPI data dur
 ## Acknowledgments
 This work would not have been possible in the current form without the ingenious work of others:
 <i>WiFiManager</i> by Tzapu, <i>PubSubClient</i> by Nick O'Leary, <i>EasyTransfer</i> by Bill Porter and <i>ArduinoJson</i> by Benoît Blanchon. In addition to using these libraries, parts of the code were obtained from the example sketches.
+
+## License
+This project is licensed under the terms of the MIT license.
