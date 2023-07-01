@@ -129,11 +129,11 @@ void setup()
               std::unique_ptr<char[]> buf(new char[size]);
 
               configFile.readBytes(buf.get(), size);
-              DynamicJsonBuffer jsonBuffer;
-              JsonObject& json = jsonBuffer.parseObject(buf.get());
+              DynamicJsonDocument json(size);
+              auto error = deserializeJson(json, buf.get());
               //json.printTo(Serial);
 
-              if (json.success())
+              if (error)
                 {
                   //Serial.println("\nParsed json");
                   strcpy(mqtt_server, json["mqtt_server"]);
@@ -305,8 +305,8 @@ void setup()
   if (shouldSaveConfig)
     {
       //Serial.println("Saving config...");
-      DynamicJsonBuffer jsonBuffer;
-      JsonObject& json = jsonBuffer.createObject();
+      DynamicJsonDocument jsonDoc(1024);
+      JsonObject json = jsonDoc.to<JsonObject>();
       json["mqtt_server"] = mqtt_server;
       json["mqtt_port"] = mqtt_port;
       json["mqtt_user"] = mqtt_user;
@@ -333,7 +333,7 @@ void setup()
         }
 */
       //json.printTo(Serial);
-      json.printTo(configFile);
+      serializeJson(json, configFile);
       configFile.close();
     }
 
